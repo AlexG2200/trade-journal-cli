@@ -1,13 +1,15 @@
 #This is going to be a basic journal for be logging my trades ideas for sunday scans.
-
+from flask import Flask,request, redirect, render_template
 import datetime as dt
 
+app = Flask(__name__)
 
-def main_menu():
+""" def main_menu():
     print("welcome to the idea and stock journal")
     print("Enter 1 to journal ideas for the upcoming week")
     print("Enter 2 to journal aftermarket scan for the next day ")
     print("Enter 3 to quit and return to Main menu")
+ """
 
 def append_to_file(filename,text):
     file = open(filename, "a")
@@ -39,89 +41,38 @@ def format_aftermarket_scan(Date, Time, Ticker, Catalyst, Levels, Plan):
         "============================\n\n"
     )
 
+@app.route("/")
+def index():
+    return render_template("index.html")
 
-def weekly_trade_ideas():
-    
-    add_more  = "y"
-    while add_more == "y":
-    #gets the current date and time
-        Date = dt.date.today()
-        Time = dt.datetime.now().strftime("%I:%M %p")
-    # asks for important info
-        Ticker = input("Enter Ticker: ")
-        Bias = input("Enter bias (bullish / bearish / neutral): ")
-        Idea = input("Describe your trade idea: ")
+@app.route("/weekly", methods = ["POST"])
+def weekly():
+    Date = dt.date.today()
+    Time = dt.datetime.now().strftime("%I:%M %p")
 
-        entry_block = format_weekly_ideas(
-            Date,
-            Time,
-            Ticker,
-            Bias,
-            Idea
-        )
+    Ticker = request.form["ticker"]
+    Bias = request.form["bias"]
+    Idea = request.form["idea"]
 
-        append_to_file("journal.txt", entry_block)
-        add_more = input("Add another trade idea? y/n")
+    entry_block = format_weekly_ideas(Date, Time, Ticker, Bias, Idea)
+    append_to_file("Journal.txt", entry_block)
 
-        if add_more == "n":
-            return
+    return redirect("/")
 
-def aftermarket_scan():
-    add_more = "y"
-    while add_more == "y":
-        #gets the current date and time
-        Date = dt.date.today()
-        Time = dt.datetime.now().strftime("%I:%M %p")
+@app.route("/aftermarket", methods = ["POST"])
+def aftermarket():
+    Date = dt.date.today()
+    Time = dt.datetime.now().strftime("%I:%M %p")
 
-        Ticker = input("Enter Ticker: ")
-        Catalyst = input("Enter catalyst (news / earnings / none): ")
-        Levels = input("Enter key levels: ")
-        Plan = input("Plan for tomorrow: ")
+    Ticker = request.form["ticker"]
+    Catalyst = request.form["catalyste"]
+    Levels = request.form["levels"]
+    Plan = request.form["levels"]
 
-        entry_block = format_aftermarket_scan(
-            Date,
-            Time,
-            Ticker,
-            Catalyst,
-            Levels,
-            Plan
-        )
+    entry_block = format_aftermarket_scan(Date, Time, Ticker, Catalyst, Levels, Plan)
+    append_to_file("afterday.txt", entry_block)
 
-    # appending to the file
-        append_to_file("journal.txt", entry_block)
-        add_more = input("Add another trade idea? y/n")
-
-        if add_more == "n":
-            return
-
-        
-
-def main():
-
-    while True:
-        main_menu()
-        choice_str = input("Please choose from one of the following options ").strip()
-        if not choice_str.isdigit():
-            print("Please enter a number (1-3).")
-            continue
-        choice = int(choice_str)
-
-        if choice == 1:
-            weekly_trade_ideas()
-
-        elif choice == 2:
-            aftermarket_scan()
-
-        elif choice == 3:
-            print("Exiting program")
-            return
-        else:
-            print("Invalid Choice. Try again ")
-
-        
+    return redirect("/")
 
 if __name__ == "__main__":
-    main()
-
-
-
+    app.run(debug=True)

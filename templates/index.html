@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trade Journal</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 40px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+            color: #222;
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: #333;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 8px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 15px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background-color: #111827;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #374151;
+        }
+
+        .section {
+            margin-top: 25px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Idea and Stock Journal</h1>
+
+        <div class="section">
+            <h2>Weekly Trade Idea</h2>
+
+            <form action="/weekly" method="POST">
+                <label for="ticker">Ticker</label>
+                <input type="text" id="ticker" name="ticker" placeholder="Example: TSLA" required>
+
+                <label for="bias">Bias</label>
+                <select id="bias" name="bias">
+                    <option value="Bullish">Bullish</option>
+                    <option value="Bearish">Bearish</option>
+                    <option value="Neutral">Neutral</option>
+                </select>
+
+                <label for="idea">Trade Idea</label>
+                <textarea id="idea" name="idea" rows="5" placeholder="Describe your trade idea..." required></textarea>
+
+                <button type="submit">Save Weekly Idea</button>
+            </form>
+        </div>
+
+        <div class="section">
+            <h2>Aftermarket Scan</h2>
+
+            <form action="/aftermarket" method="POST">
+                <label for="after_ticker">Ticker</label>
+                <input type="text" id="after_ticker" name="ticker" placeholder="Example: NVDA" required>
+
+                <label for="catalyst">Catalyst</label>
+                <input type="text" id="catalyst" name="catalyst" placeholder="News / earnings / none">
+
+                <label for="levels">Key Levels</label>
+                <input type="text" id="levels" name="levels" placeholder="Example: PMH 185.50, PML 180.20" required>
+
+                <label for="plan">Plan for Tomorrow</label>
+                <textarea id="plan" name="plan" rows="5" placeholder="Write your plan for tomorrow..." required></textarea>
+
+                <button type="submit">Save Aftermarket Scan</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
